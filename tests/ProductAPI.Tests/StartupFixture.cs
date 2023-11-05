@@ -2,6 +2,8 @@ using Amazon.DynamoDBv2;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using Infrastructure.Definitions;
+using Testcontainers.DynamoDb;
+using Testcontainers.LocalStack;
 
 namespace ProductAPI.Tests;
 
@@ -13,21 +15,36 @@ public class StartupFixture : IDisposable
     
     public StartupFixture()
     {
-        container = new ContainerBuilder()
-            // Set the image for the container to "testcontainers/helloworld:1.1.0".
-            .WithImage("amazon/dynamodb-local:1.24.0")
-            // Bind port 8080 of the container to a random port on the host.
-            .WithPortBinding(8000, 8000)
+        var databaseDefinition = new DatabaseProps();
+        
+        container = new DynamoDbBuilder()
+            .WithPortBinding(8000, true)
             .Build();
 
-        container.StartAsync().GetAwaiter().GetResult();
+        var serviceUrl = "";
+
+        if (Environment.GetEnvironmentVariable("USE_LOCAL_STACK") == "Y")
+        {
+            var localStackContainer = new LocalStackBuilder()
+                .Build();
+            
+            localStackContainer.StartAsync().GetAwaiter().GetResult();
+
+            serviceUrl = localStackContainer.GetConnectionString();
+        }
+        else
+        {
+            container.StartAsync().GetAwaiter().GetResult();
+
+            serviceUrl = $"http://localhost:{container.GetMappedPublicPort(8000)}";
+        }
         
+        container.StartAsync().GetAwaiter().GetResult();
+
         this.DynamoDbClient = new AmazonDynamoDBClient(new AmazonDynamoDBConfig()
         {
-            ServiceURL = "http://localhost:8000"
+            ServiceURL = serviceUrl
         });
-        
-        var databaseDefinition = new DatabaseProps();
 
         this.DynamoDbClient.CreateTableAsync(databaseDefinition.AsCreateRequest()).GetAwaiter().GetResult();
     }
