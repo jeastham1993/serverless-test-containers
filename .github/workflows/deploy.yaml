@@ -1,5 +1,5 @@
 # This is a basic workflow to help you get started with Actions
-name: Connect to an AWS role from a GitHub repository
+name: .NET Test & Deploy
 
 on:
   push:
