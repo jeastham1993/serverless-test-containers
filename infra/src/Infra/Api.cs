@@ -20,7 +20,7 @@ public class Api : RestApi
    
     public Api WithEndpoint(string path, HttpMethod method, Function function)
     {
-        IResource? lastResource = null;
+        IResource lastResource = null;
 
         foreach (var pathSegment in path.Split('/'))
         {
@@ -61,7 +61,7 @@ public class Api : RestApi
     
     public Api WithEndpoint(string path, Function function)
     {
-        IResource? lastResource = null;
+        IResource lastResource = null;
 
         foreach (var pathSegment in path.Split('/'))
         {
