@@ -27,7 +27,26 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE }}
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
-      # Hello from AWS: WhoAmI
-      - name: Sts GetCallerIdentity
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: Install Python dependencies and CDK
         run: |
-          aws sts get-caller-identity
+          python -m pip install --upgrade pip
+          # install your Python dependencies here
+          npm install -g aws-cdk
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+      - name: cdk deploy
+        run: |
+          dotnet test tests/ProductAPI.Tests/
+      - name: cdk deploy
+        run: |
+          cd infra
+          cdk deploy --require-approval=never
