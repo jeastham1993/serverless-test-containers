@@ -1,4 +1,3 @@
-# This is a basic workflow to help you get started with Actions
 name: .NET Test & Deploy
 
 on:
@@ -8,10 +7,8 @@ on:
     branches: [ main ]
 
 env:
-  
-  AWS_REGION : eu-west-1 #Change to reflect your Region
+  AWS_REGION : eu-west-1
 
-# Permission can be added at job level or workflow level    
 permissions:
       id-token: write   # This is required for requesting the JWT
       contents: read    # This is required for actions/checkout
@@ -27,7 +24,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE }}
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
-      - name: Set up Python 3.9
+      - name: Set up Python 3.12
         uses: actions/setup-python@v4
         with:
           python-version: "3.12"
@@ -43,7 +40,7 @@ jobs:
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '6.0.x'
-      - name: cdk deploy
+      - name: dotnet test
         run: |
           dotnet test tests/ProductAPI.Tests/
       - name: cdk deploy
