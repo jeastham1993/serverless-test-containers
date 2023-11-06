@@ -1,5 +1,4 @@
 using Amazon.DynamoDBv2;
-using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using Infrastructure.Definitions;
 using Testcontainers.DynamoDb;
@@ -7,7 +6,7 @@ using Testcontainers.LocalStack;
 
 namespace ProductAPI.Tests;
 
-public class StartupFixture : IDisposable
+public sealed class StartupFixture : IDisposable
 {
     private readonly IContainer container;
 

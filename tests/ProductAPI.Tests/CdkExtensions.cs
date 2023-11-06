@@ -17,7 +17,7 @@ public static class CdkExtensions
         
         if (props.TableProps.SortKey != null)
         {
-            keySchema.Add(new KeySchemaElement(props.TableProps.SortKey.Name, KeyType.HASH));
+            keySchema.Add(new KeySchemaElement(props.TableProps.SortKey.Name, KeyType.RANGE));
             attributeDefinitions.Add(new AttributeDefinition(props.TableProps.SortKey.Name, ScalarAttributeType.S));
         }
 
