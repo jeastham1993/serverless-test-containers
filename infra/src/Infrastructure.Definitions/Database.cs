@@ -19,9 +19,14 @@ public class DatabaseProps
             RemovalPolicy = RemovalPolicy.DESTROY,
             PartitionKey = new Attribute
             {
-                Name = "id",
+                Name = "PK",
                 Type = AttributeType.STRING
             },
-        };
+            SortKey = new Attribute()
+            {
+                Name = "SK",
+                Type = AttributeType.STRING
+            }
+    };
     }
 }

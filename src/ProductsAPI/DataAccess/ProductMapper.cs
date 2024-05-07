@@ -7,7 +7,7 @@ namespace ProductsAPI.DataAccess;
 
 public class ProductMapper
 {
-    public static string PK = "id";
+    public static string PK = "PK";
     public static string NAME = "name";
     public static string PRICE = "price";
 

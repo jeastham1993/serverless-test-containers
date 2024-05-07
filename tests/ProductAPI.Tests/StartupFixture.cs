@@ -1,3 +1,4 @@
+using Amazon;
 using Amazon.DynamoDBv2;
 using DotNet.Testcontainers.Containers;
 using Infrastructure.Definitions;
@@ -42,7 +43,7 @@ public sealed class StartupFixture : IDisposable
 
         this.DynamoDbClient = new AmazonDynamoDBClient(new AmazonDynamoDBConfig()
         {
-            ServiceURL = serviceUrl
+            ServiceURL = serviceUrl,
         });
 
         this.DynamoDbClient.CreateTableAsync(databaseDefinition.AsCreateRequest()).GetAwaiter().GetResult();
